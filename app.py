@@ -18,6 +18,23 @@ def helloworld():
     return jsonify({"Hello": "World"})
 
 
+@app.route('/board', defaults={'board_no': ''}, methods=['GET'])
+@app.route('/board/<board_no>', methods=['GET'])
+def board(board_no):
+    results = []
+    datas = []
+
+    if board_no != "":
+        datas = Board.query.filter_by(board_no = board_no).all()
+    else:
+        datas = Board.query.all()
+
+    for data in datas:
+        results.append(data.to_json())
+
+    return jsonify(results)
+
+
 @app.route('/board', methods=['POST'])
 def create_board():
     try:
@@ -42,6 +59,42 @@ def create_board():
         message = e
 
     result_data = {"status": "{}".format(status), "message": "{}".format(message), "data": data}
+
+    return jsonify(result_data)
+
+
+@app.route('/board', methods=['PUT'])
+def update_board():
+    try:
+        status = True
+        message = "Board updated successfully"
+
+        param = request.get_json()
+
+        result = db.session.query(Board).filter(Board.board_no == param['board_no']).update({
+            'title': param['title'],
+            'contents': param['contents'],
+            'writer': param['writer'],
+            'view_count': param['view_count'],
+            'link_url': param['link_url']
+        })
+
+        db.session.flush()
+        db.session.commit()
+
+        if result == 1:
+            data = db.session.query(Board).filter(Board.board_no == param['board_no']).one()
+        elif result == 0:
+            message = "Board not updated. No product found with this board_no :" + \
+                str(param['board_no'])
+            status = False
+            data = None
+    except Exception as e:
+        status = False
+        data = None
+        message = e
+
+    result_data = {"status": "{}".format(status), "message": "{}".format(message), "data": data.to_json()}
 
     return jsonify(result_data)
 
