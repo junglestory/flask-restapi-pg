@@ -99,5 +99,27 @@ def update_board():
     return jsonify(result_data)
 
 
+@app.route('/board/<board_no>', methods=['DELETE'])
+def delete_board(board_no):
+    try:
+        status = True
+
+        result = db.session.query(Board).filter(Board.board_no == board_no).delete()
+        db.session.commit()
+
+        if result == 1:
+            message = "Board deleted successfully"
+        else:
+            message = "Board not deleted. No product found with this board_no :" + \
+                str(board_no)
+    except Exception as e:
+        status = False
+        message = e
+
+    result_data = {"status": "{}".format(status), "message": "{}".format(message), "data": ""}
+
+    return jsonify(result_data)
+
+
 if __name__ == "__main__":
     app.run(debug=True, host='0.0.0.0', port=5000)
