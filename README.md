@@ -1,4 +1,4 @@
-# flask-restapi-pg
+# Flask restapi pg
 This application is a Flask Rest API with PostgreSQL.
 
 ## Requirements
@@ -6,4 +6,4 @@ This application is a Flask Rest API with PostgreSQL.
 - [VS Code](https://code.visualstudio.com/download)
 - [Postman](https://www.postman.com/downloads/)
 - [PostgreSQL](https://www.postgresql.org/download/)
-- [Board 테이블 생성](https://github.com/junglestory/junglestory-boilerplate/blob/main/sql/board.sql)
+- [Board](https://github.com/junglestory/junglestory-boilerplate/blob/main/sql/board.sql) 테이블 생성
